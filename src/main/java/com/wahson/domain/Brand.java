@@ -1,13 +1,13 @@
 package com.wahson.domain;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -18,6 +18,8 @@ import lombok.EqualsAndHashCode;
  * @since 2022-09-08
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("tb_brand")
 public class Brand implements Serializable {
@@ -27,9 +29,12 @@ public class Brand implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String brand_name;
+    @TableField(value = "book_name")
+    private String brandName;
 
-    private String company_name;
+    // 解决与数据库命名不一致(类似resultMap)
+    @TableField(value = "company_name")
+    private String companyName;
 
     private Integer ordered;
 
@@ -37,9 +42,11 @@ public class Brand implements Serializable {
 
     private Integer status;
 
+    @TableField(select = false)
     @Version
     private Integer version;
 
+    @TableField(select = false) // 不参与查询
     @TableLogic
     private Integer deleted;
 
