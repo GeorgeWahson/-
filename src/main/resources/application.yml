@@ -1,0 +1,17 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+# 开启调试输出
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 隐藏MP banner
+  global-config:
+    banner: false
+
+# 隐藏spring banner
+spring:
+  main:
+    banner-mode: off
+
