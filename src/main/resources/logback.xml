@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+</configuration>
+
+<!--取消初始化spring日志打印，resources目录下添加logback.xml-->
