@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-09-08
  */
 public interface IBrandService extends IService<Brand> {
-
+    
 }
