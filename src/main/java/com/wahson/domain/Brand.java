@@ -50,5 +50,8 @@ public class Brand implements Serializable {
     @TableLogic
     private Integer deleted;
 
+    /**
+     * 考虑范围查询的话，可以定义个类继承Brand, @Data后定义个maxOrdered
+     */
 
 }
