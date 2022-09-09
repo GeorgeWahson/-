@@ -14,4 +14,11 @@ mybatis-plus:
 spring:
   main:
     banner-mode: off
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
+    username: root
+    password: Wahson11736
+
 
