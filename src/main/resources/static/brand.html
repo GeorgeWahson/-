@@ -484,6 +484,9 @@
                 }).then(() => {
                     // 创建id数组[1,2,3] this.multipleSelection
                     // multipleSelection为多个对象及其他数据的集合
+
+                    // 清空数组，避免上次数据干扰
+                    this.selectedIds = [];
                     for (let i = 0; i < this.multipleSelection.length; i++) {
                         let selectionElement = this.multipleSelection[i];
                         this.selectedIds[i] = selectionElement.id;
@@ -503,6 +506,7 @@
                                 message: 'Bingo! 删除成功',
                                 type: 'success'
                             });
+
                         }
                     })
                 }).catch(() => {
