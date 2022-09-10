@@ -1,9 +1,5 @@
 package com.wahson.exception;
 
-/**
- *
- * TODO 异常反馈类
- */
 public class BusinessException extends RuntimeException{
     private Integer code;
 

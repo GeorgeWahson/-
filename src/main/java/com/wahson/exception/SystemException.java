@@ -1,9 +1,6 @@
 package com.wahson.exception;
 
-/**
- *
- * TODO 异常反馈类
- */
+
 public class SystemException extends RuntimeException{
     private Integer code;
 

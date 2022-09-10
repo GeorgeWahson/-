@@ -66,8 +66,6 @@ public class BrandController {
     // 改 PUT 更新数据，通过id
     @PutMapping
     public Result updateBrand(@RequestBody Brand brand) {
-        // TODO 测试输出
-        System.out.println("controller: " + brand);
 
         boolean flag = brandService.updateBrand(brand);
         System.out.println("flag" + flag);

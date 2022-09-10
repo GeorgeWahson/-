@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
-/**
- * TODO 异常操作类
- */
 @RestControllerAdvice
 public class ProjectExceptionAdvice {
     @ExceptionHandler(SystemException.class)
