@@ -124,14 +124,19 @@
         <el-table
                 :data="tableData"
                 style="width: 100%"
+                ref="multipleTable"
                 stripe
                 border
+                :row-key="getRowKeyOfTarget"
                 @selection-change="handleSelectionChange">
             <!--第一列复选框用于批量删除-->
+
             <el-table-column
                     type="selection"
                     width="55"
-                    align="center">
+                    align="center"
+                    :reserve-selection="true" >  <!--防止换页取消选择，仅对 type=selection 的列有效，类型为
+                    Boolean，为 true 则会在数据更新之后保留之前选中的数据（需指定 row-key）-->
             </el-table-column>
             <!--第二列用于顺序索引-->
             <el-table-column
@@ -255,7 +260,6 @@
 <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
 
 <script>
-    // import da from "./element-ui/src/locale/lang/da";
 
     new Vue({
         el: "#app",
@@ -263,6 +267,10 @@
             this.selectAll();
         },
         methods: {
+
+            getRowKeyOfTarget(row) {
+                return row.id;
+            },
 
             // 取消添加操作
             cancelAdd() {
@@ -466,7 +474,6 @@
                 })
             },
 
-            // TODO 不能跨页删除
             // 批量删除
             deleteByIds() {
                 // 所选数据为0时，直接提示并return
@@ -485,8 +492,6 @@
                     // 创建id数组[1,2,3] this.multipleSelection
                     // multipleSelection为多个对象及其他数据的集合
 
-                    // 清空数组，避免上次数据干扰
-                    this.selectedIds = [];
                     for (let i = 0; i < this.multipleSelection.length; i++) {
                         let selectionElement = this.multipleSelection[i];
                         this.selectedIds[i] = selectionElement.id;
@@ -498,6 +503,10 @@
                         data: this.selectedIds
                     }).then(resp => {
                         if (resp.data.code === 20021) {
+                            // 清空数组，避免上次数据干扰
+                            this.$refs.multipleTable.clearSelection();
+                            this.selectedIds = [];
+
                             this.currentPage = 1;
                             // 重新查询数据
                             this.selectAll();
