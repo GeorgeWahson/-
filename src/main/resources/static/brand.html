@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Brand HTML</title>
+    <title>品牌管理系统</title>
     <style>
         .el-table .warning-row {
             background: oldlace;
@@ -11,19 +11,36 @@
         .el-table .success-row {
             background: #f0f9eb;
         }
+
+
+        .content-header {
+
+            position: relative;
+
+            padding: 15px 15px 0 15px;
+
+            /* margin-top: 70px; */
+
+        }
     </style>
 
 </head>
 <body>
 <div id="app">
 
+    <div class="content-header">
+
+        <h1>品牌管理系统</h1>
+
+    </div>
+
+    <hr color="green">
     <!--搜索表单-->
     <el-form :inline="true" :model="brand" class="demo-form-inline">
         <!--brand.statusStr 相当于前面加个get &ndash;&gt; brand.getStatusStr()-->
         <el-form-item label="当前状态">
-            <!--TODO 搜索表单statusStr-->
-            <el-select v-model="brand.status"  placeholder="当前状态">
-                <el-option  label="所有状态" value=""></el-option>  <!--清空选择-->
+            <el-select v-model="brand.status" placeholder="当前状态">
+                <el-option label="所有状态" value=""></el-option>  <!--清空选择-->
                 <el-option label="启用" value="1"></el-option>
                 <el-option label="禁用" value="0"></el-option>
             </el-select>
@@ -46,10 +63,9 @@
         </el-form-item>
     </el-form>
 
-    <!--按钮-->
     <el-row>
         <el-button type="danger" plain @click="deleteByIds">批量删除</el-button>
-        <el-button type="primary" plain @click="dialogVisible = true; openAdd()">新增</el-button>
+        <el-button type="primary" plain @click=" brand.status = 1; checkStatusValue(); dialogVisible = true;">新增</el-button>
     </el-row>
 
     <br>
@@ -58,7 +74,11 @@
     <el-dialog
             title="新建品牌"
             :visible.sync="dialogVisible"
-            width="30%">
+            width="30%"
+            @close="clearAfter"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :show-close="false">
 
         <el-form ref="form" :model="brand" label-width="90px">
             <el-form-item label="品牌名称：">
@@ -77,22 +97,23 @@
                 <el-input type="textarea" v-model="brand.description"></el-input>
             </el-form-item>
 
-            <!--TODO 待测试关于状态开关-->
+
             <el-form-item label="状态：">
-                <el-switch v-model="brand.status"
-                           name="testSwitch"
-                           active-value="1"
-                           inactive-value="0"
-                           active-color="#13ce66"
-                           inactive-color="#ff4949"
-                           active-text="启用"
-                           inactive-text="禁止">
+                <el-switch
+                        v-model="switchValue"
+                        :active-value="1"
+                        :inactive-value="0"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="启用"
+                        inactive-text="禁止"
+                        @change="switchChange">
                 </el-switch>
             </el-form-item>
             <!--底部按钮-->
             <el-form-item>
                 <el-button type="primary" @click="addBrand">提交</el-button>
-                <el-button @click="clearAfter(); dialogVisible = false">取消</el-button>
+                <el-button @click="clearAfter(); dialogVisible = false; cancelAdd();">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -158,7 +179,8 @@
                     label="操作">
                 <el-row slot-scope="scope">
                     <el-button type="primary"
-                               @click="changClickRow(scope.row) ; changeBrandDialogVisible = true; openAdd();">修改
+                               @click="changClickRow(scope.row) ;  changeBrandDialogVisible = true; checkStatusValue();">
+                        修改
                     </el-button>
                     <el-button type="danger" @click="handleClick(scope.row)">删除</el-button>
                 </el-row>
@@ -191,21 +213,23 @@
             <el-form-item label="备注：">
                 <el-input type="textarea" v-model="brand.description"></el-input>
             </el-form-item>
-            <!--TODO 是否可以通过读取数值来确定开关状态-->
+
             <el-form-item label="状态：">
-                <el-switch v-model="brand.status"
-                           active-value="1"
-                           inactive-value="0"
-                           active-color="#13ce66"
-                           inactive-color="#ff4949"
-                           active-text="启用"
-                           inactive-text="禁止">
+                <el-switch
+                        v-model="switchValue"
+                        :active-value="1"
+                        :inactive-value="0"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="启用"
+                        inactive-text="禁止"
+                        @change="switchChange">
                 </el-switch>
             </el-form-item>
             <!--底部功能按钮-->
             <el-form-item>
                 <el-button type="primary" @click="updateBrand">提交修改</el-button>
-                <el-button @click="clearAfter(); changeBrandDialogVisible = false">取消</el-button>
+                <el-button @click="clearAfter(); changeBrandDialogVisible = false; cancelUpdate()">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -231,6 +255,8 @@
 <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
 
 <script>
+    // import da from "./element-ui/src/locale/lang/da";
+
     new Vue({
         el: "#app",
         mounted() {
@@ -238,13 +264,34 @@
         },
         methods: {
 
-            // TODO 根据brand.status返回value
+            // 取消添加操作
+            cancelAdd() {
+                this.$message({
+                    showClose: true,
+                    message: '已取消添加'
+                });
+            },
+
+            // 取消修改操作
+            cancelUpdate() {
+                this.$message({
+                    showClose: true,
+                    message: '已取消修改'
+                });
+            },
+
+            // 开关变化时，将值变为brand.status传入
+            switchChange() {
+                this.brand.status = this.switchValue;
+            },
+            // 根据brand.status返回value
             checkStatusValue() {
-              if (this.brand.status === 0) {
-                  document.getElementsByName("testSwitch").active;
-              } else {
-                  document.getElementsByName("testSwitch").inactive;
-              }
+                if (this.brand.status === 0) {
+                    this.switchValue = 0;
+                } else {
+                    this.switchValue = 1;
+                }
+                return this.switchValue;
             },
 
 
@@ -316,11 +363,9 @@
                 this.brand.companyName = row.companyName;
                 this.brand.description = row.description;
                 this.brand.ordered = row.ordered;
-                // TODO status问题
                 this.brand.status = row.status;
 
             },
-
 
 
             // 查询方法（包含条件、页数及size信息，若无条件则是原始的selectAll）
@@ -373,7 +418,7 @@
                 }).then(resp => {
                     if (resp.data.code === 20011) {
                         // 因为添加的数据框绑定搜索的数据框，所以要添加后清空搜索框
-                        this.clearAfter()
+                        this.clearAfter();
                         // 添加成功后跳转回第一页
                         this.currentPage = 1;
                         // 关闭窗口
@@ -389,12 +434,6 @@
                 })
             },
 
-            // TODO status
-            //  开启时开关默认为关，
-            //  那就设置其值为0，避免初始无数据
-            openAdd() {
-                this.brand.status = '0';
-            },
 
             // 修改数据
             updateBrand() {
@@ -526,8 +565,8 @@
                 // 被选中的ids
                 selectedIds: [],
 
-                /*TODO status*/
-                value1 : 0,
+                // 开关默认值 开
+                switchValue: 1,
 
                 // 初始化表格数据
                 tableData: [{
