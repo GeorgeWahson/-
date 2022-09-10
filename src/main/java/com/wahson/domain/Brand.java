@@ -29,7 +29,7 @@ public class Brand implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @TableField(value = "book_name")
+    @TableField(value = "brand_name")
     private String brandName;
 
     // 解决与数据库命名不一致(类似resultMap)
@@ -49,6 +49,16 @@ public class Brand implements Serializable {
     @TableField(select = false) // 不参与查询
     @TableLogic
     private Integer deleted;
+
+
+
+    // //逻辑视图
+    public String getStatusStr(){
+        if (status == null){
+            return "未知";
+        }
+        return status == 0 ? "禁用":"启用";
+    }
 
     /**
      * 考虑范围查询的话，可以定义个类继承Brand, @Data后定义个maxOrdered
