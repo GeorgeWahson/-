@@ -21,9 +21,25 @@ public class Result {
 
     private String msg;
 
-    // 不带反馈信息的Result对象
+    //
+    private Integer totalCount;
+
+    // 不带反馈信息的Result对象，操作成功时不用显示msg
     public Result(Integer code,Object data) {
         this.data = data;
         this.code = code;
+    }
+
+    public Result(Object data, Integer code, String msg) {
+        this.data = data;
+        this.code = code;
+        this.msg = msg;
+    }
+
+    // TODO 成功后补注释
+    public Result(Integer code, Object data, Integer totalCount) {
+        this.data = data;
+        this.code = code;
+        this.totalCount = totalCount;
     }
 }

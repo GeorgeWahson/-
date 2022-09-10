@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ProjectExceptionAdvice {
     @ExceptionHandler(SystemException.class)
     public Result doSystemException(SystemException ex){
+        ex.printStackTrace();
         // 记录日志
         // 发送消息给运维
         // 发送邮件给开发人员,ex对象发送给开发人员
@@ -21,6 +22,7 @@ public class ProjectExceptionAdvice {
 
     @ExceptionHandler(BusinessException.class)
     public Result doBusinessException(BusinessException ex){
+        ex.printStackTrace();
         return new Result(ex.getCode(),null,ex.getMessage());
     }
 
@@ -29,6 +31,7 @@ public class ProjectExceptionAdvice {
         // 记录日志
         // 发送消息给运维
         // 发送邮件给开发人员,ex对象发送给开发人员
+        ex.printStackTrace();
         return new Result(Code.SYSTEM_UNKNOW_ERR,null,"系统繁忙，请稍后再试！");
     }
 }
