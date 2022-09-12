@@ -40,14 +40,6 @@ public class BrandController {
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
     }
 
-    // 查 GET
-    // brand对象从前端请求体RequestBody中传来
-    @GetMapping
-    public Result selectAll() {
-        List<Brand> brandList = brandService.selectAll();
-        Integer code = brandList != null ? Code.SAVE_OK : Code.SAVE_ERR;
-        return new Result(code, brandList);
-    }
 
     // 删 DELETE 单个
     @DeleteMapping("/{id}")
@@ -81,30 +73,25 @@ public class BrandController {
      * @param pageSize
      * @return
      */
+
+    // TODO 可以将部分操作移到 BrandServiceImpl
     @PostMapping("/{currentPage}/{pageSize}")
     public Result selectByPageAndCondition (@PathVariable Integer currentPage, @PathVariable Integer pageSize, @RequestBody(required = false) Brand brand) {
 
-        /*{
-            "id": 2,
-            "brandName": "华位",
-            "companyName": "华为科技有限公司",
-            "ordered": 100,
-            "description": "以行践言，华为。",
-            "status": 1
-        }*/
-        IPage<Brand> page = new Page<>(currentPage, pageSize);
-        LambdaQueryWrapper<Brand> lqw = new LambdaQueryWrapper<Brand>();
-        // 当值不存在时，不添加该搜索条件
-        // 第一个为搜索条件，即值不为空。第二个参数为数据库列名称，第三个为用于搜索的值，
-        // like("name", "王")--->name like '%王%'
-        lqw.like(null != brand.getBrandName(), Brand::getBrandName, brand.getBrandName());
-        lqw.like(null != brand.getCompanyName(), Brand::getCompanyName, brand.getCompanyName());
-        lqw.like(null != brand.getStatus(), Brand::getStatus, brand.getStatus());
-        IPage<Brand> resultPage = brandDao.selectPage(page, lqw);
+        IPage<Brand> resultPage = brandService.selectByPageAndCondition(currentPage, pageSize, brand);
         List<Brand> resultPageRecords = resultPage.getRecords();
         Integer totalCount = Math.toIntExact(resultPage.getTotal());
         boolean flag = resultPageRecords.size() > 0;
         return new Result(flag ? Code.GET_OK : Code.GET_ERR, resultPageRecords, totalCount);
+    }
+
+    // 该方法为测试方法，因要考虑页码，条件查询及每页显示的数量，故实际运行时并不会调用
+    // 查 GET
+    @GetMapping
+    public Result selectAll() {
+        List<Brand> brandList = brandService.selectAll();
+        Integer code = brandList != null ? Code.SAVE_OK : Code.SAVE_ERR;
+        return new Result(code, brandList);
     }
 
 
