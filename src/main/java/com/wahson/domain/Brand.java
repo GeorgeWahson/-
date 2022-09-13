@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author GeorgeWahson
@@ -22,7 +23,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("tb_brand")
-public class Brand implements Serializable {
+// ActiveRecord的主要思想是： 每一个数据库表对应创建一个类，类的每一个对象实例对应于数据库中表的一行记录；通常表的每个字段 在类中都有相应的Field；
+//        ActiveRecord同时负责把自己持久化，在ActiveRecord中封装了对数据库的访问，即CRUD;；
+//        ActiveRecord是一种领域模型(Domain Model)，封装了部分业务逻辑；
+// 底层还是需要Mapper的。即BrandDao，测试时需要注入
+// public class Brand extends Model<Brand> implements Serializable{
+public class Brand implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +48,11 @@ public class Brand implements Serializable {
 
     private Integer status;
 
-    @TableField(select = false)
+
+    /*
+        @TableField(select = false)
+        不能加 select = false,否则更新数据时不会sql语句不会添加SET version = ?
+    */
     @Version
     private Integer version;
 

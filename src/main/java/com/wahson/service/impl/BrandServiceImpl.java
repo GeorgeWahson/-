@@ -50,11 +50,25 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements IB
     }
 
 
-    // 改 前端页面传入修改后数据转入brand中进行修改
+    /**
+     * 修改数据，并引用MP的乐观锁插件
+     * 因此，不能直接用前端页面传来的brand进行更新：brandDao.updateById(brand)
+     * 要先根据id查询获得原对象Object1，再依次setXXX,最后updateById(Object1)......
+     * @param brand
+     * @return
+     */
+
     public boolean updateBrand(Brand brand) {
-        System.out.println("service: " + brand);
-        int update = brandDao.updateById(brand);
-        System.out.println("update number: " + update);
+
+        Brand brandVersion = brandDao.selectById(brand.getId());
+
+        brandVersion.setBrandName(brand.getBrandName());
+        brandVersion.setCompanyName(brand.getCompanyName());
+        brandVersion.setOrdered(brand.getOrdered());
+        brandVersion.setStatus(brand.getStatus());
+        brandVersion.setDescription(brand.getDescription());
+
+        int update = brandDao.updateById(brandVersion);
         return update == 1;
     }
 
