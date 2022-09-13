@@ -60,7 +60,6 @@ public class BrandController {
     public Result updateBrand(@RequestBody Brand brand) {
 
         boolean flag = brandService.updateBrand(brand);
-        System.out.println("flag" + flag);
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag);
     }
 
