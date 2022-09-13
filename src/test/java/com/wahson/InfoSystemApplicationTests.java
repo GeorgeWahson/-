@@ -26,10 +26,12 @@ class InfoSystemApplicationTests {
     @Test
     void testSelectById() {
         Brand brand = new Brand();
+        Integer count = brandDao.selectCount(null);
         IPage<Brand> resultPage = brandService.selectByPageAndCondition(1, 10, brand);
         System.out.println("==========每页显示数量为：" + resultPage.getSize() + "==========");
         System.out.println("=============当前为第" + resultPage.getCurrent() + "页=============");
-        System.out.println("查询结果数据总量为：" + resultPage.getTotal());
+        System.out.println("数据库共有" + count + "条数据（selectCount）");
+        System.out.println("符合查询条件的数据有：" + resultPage.getTotal() + "条（getTotal）");
         System.out.println("查询结果总页数为：" + resultPage.getPages());
         System.out.println("查询结果如下：");
         List<Brand> records = resultPage.getRecords();
@@ -44,6 +46,16 @@ class InfoSystemApplicationTests {
         for (Brand brand : brandList) {
             System.out.println(brand);
         }
+    }
+
+    @Test
+    void testActiveRecord() {
+        // 不用brandDao brandService亦可以查询
+        // 为了不冲突，原Brand.java中extends Model<User>已被注释，开启后即可测试
+        Brand brand = new Brand();
+        brand.setId(66);
+//        Brand brand1 = brand.selectById();
+//        System.out.println(brand1);
     }
 
 }
