@@ -65,7 +65,8 @@
 
     <el-row>
         <el-button type="danger" plain @click="deleteByIds">批量删除</el-button>
-        <el-button type="primary" plain @click=" brand.status = 1; checkStatusValue(); dialogVisible = true;">新增</el-button>
+        <el-button type="primary" plain @click=" brand.status = 1; checkStatusValue(); dialogVisible = true;">新增
+        </el-button>
     </el-row>
 
     <br>
@@ -74,26 +75,27 @@
     <el-dialog
             title="新建品牌"
             :visible.sync="dialogVisible"
-            width="30%"
+            width="35%"
             @close="clearAfter"
             :close-on-click-modal="false"
             :close-on-press-escape="false"
             :show-close="false">
 
-        <el-form ref="form" :model="brand" label-width="90px">
-            <el-form-item label="品牌名称：">
-                <el-input v-model="brand.brandName"></el-input>
+        <el-form ref="addForm" :model="brand" label-width="110px" :rules="rules">
+            <el-form-item label="品牌名称：" prop="brandName">
+                <el-input v-model="brand.brandName" clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="企业名称：">
-                <el-input v-model="brand.companyName"></el-input>
+            <el-form-item label="企业名称：" prop="companyName">
+                <el-input v-model="brand.companyName" clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="排序：">
-                <el-input v-model="brand.ordered" type="number" placeholder="请输入数字" min="0"></el-input>
+            <el-form-item label="排序：" prop="ordered">
+                <el-input v-model="brand.ordered" type="number" max="9999" placeholder="请输入1-9999之内的整数" min="1"
+                          clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="备注：">
+            <el-form-item label="备注：" prop="description">
                 <el-input type="textarea" v-model="brand.description"></el-input>
             </el-form-item>
 
@@ -112,8 +114,9 @@
             </el-form-item>
             <!--底部按钮-->
             <el-form-item>
-                <el-button type="primary" @click="addBrand">提交</el-button>
-                <el-button @click="clearAfter(); dialogVisible = false; cancelAdd();">取消</el-button>
+                <el-button type="warning" @click="resetForm('addForm')">重置</el-button>
+                <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
+                <el-button type="info" @click="clearAfter(); dialogVisible = false; cancelAdd();">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -135,7 +138,7 @@
                     type="selection"
                     width="55"
                     align="center"
-                    :reserve-selection="true" >  <!--防止换页取消选择，仅对 type=selection 的列有效，类型为
+                    :reserve-selection="true">  <!--防止换页取消选择，仅对 type=selection 的列有效，类型为
                     Boolean，为 true 则会在数据更新之后保留之前选中的数据（需指定 row-key）-->
             </el-table-column>
             <!--第二列用于顺序索引-->
@@ -198,24 +201,25 @@
     <el-dialog
             title="修改品牌"
             :visible.sync="changeBrandDialogVisible"
-            width="30%"
+            width="35%"
             :show-close="false">
 
-        <el-form ref="form" :model="brand" label-width="90px">
+        <el-form ref="updateForm" :model="brand" label-width="110px" :rules="rules">
 
             <el-form-item label="ID：">
                 <el-input v-model="brand.id" disabled></el-input>
             </el-form-item>
-            <el-form-item label="品牌名称：">
-                <el-input v-model="brand.brandName"></el-input>
+            <el-form-item label="品牌名称：" prop="brandName">
+                <el-input v-model="brand.brandName" clearable></el-input>
             </el-form-item>
-            <el-form-item label="企业名称：">
-                <el-input v-model="brand.companyName"></el-input>
+            <el-form-item label="企业名称：" prop="companyName">
+                <el-input v-model="brand.companyName" clearable></el-input>
             </el-form-item>
-            <el-form-item label="排序：">
-                <el-input v-model="brand.ordered" type="number" placeholder="请输入数字" min="0"></el-input>
+            <el-form-item label="排序：" prop="ordered">
+                <el-input v-model="brand.ordered" type="number" max="10000" placeholder="请输入数字" min="1"
+                          clearable></el-input>
             </el-form-item>
-            <el-form-item label="备注：">
+            <el-form-item label="备注：" prop="description">
                 <el-input type="textarea" v-model="brand.description"></el-input>
             </el-form-item>
 
@@ -233,8 +237,9 @@
             </el-form-item>
             <!--底部功能按钮-->
             <el-form-item>
-                <el-button type="primary" @click="updateBrand">提交修改</el-button>
-                <el-button @click="clearAfter(); changeBrandDialogVisible = false; cancelUpdate()">取消</el-button>
+                <el-button type="primary" @click="submitForm('updateForm')">提交修改</el-button>
+                <el-button type="info" @click="clearAfter(); changeBrandDialogVisible = false; cancelUpdate()">取消
+                </el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -267,6 +272,27 @@
             this.selectAll();
         },
         methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (formName === "updateForm"){
+                            this.updateBrand();
+                        } else if (formName === "addForm"){
+                            this.addBrand();
+                        }
+                    } else {
+
+                        this.$message({
+                            type: 'error',
+                            message: '请按要求填写!'
+                        });
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
 
             getRowKeyOfTarget(row) {
                 return row.id;
@@ -474,6 +500,7 @@
                 })
             },
 
+
             // 批量删除
             deleteByIds() {
                 // 所选数据为0时，直接提示并return
@@ -550,6 +577,16 @@
 
         },
         data() {
+            var checkOrdered = (rule, value, callback) => {
+
+                let rgx = /^[1-9]\d{0,3}$/;
+                if (!rgx.test(value)) {
+                    return callback(new Error('输入值异常'))
+                } else {
+                    callback();
+                }
+
+            };
             return {
                 // 初始默认数据
                 totalCount: 100,
@@ -580,6 +617,23 @@
 
                 // 开关默认值 开
                 switchValue: 1,
+
+
+                rules: {
+                    companyName: [
+                        {required: true, message: '请输入公司名称', trigger: 'blur'}
+                    ],
+                    brandName: [
+                        {required: true, message: '请输入品牌名称', trigger: 'blur'}
+                    ],
+                    ordered: [
+                        {required: true, message: '输入排序值', trigger: 'blur'},
+                        {validator: checkOrdered, message: '范围在1-9999之内的整数', trigger: 'blur'}
+                    ],
+                    description: [
+                        {required: false, message: '请输入品牌简介', trigger: 'blur'}
+                    ]
+                },
 
                 // 初始化表格数据
                 tableData: [{
