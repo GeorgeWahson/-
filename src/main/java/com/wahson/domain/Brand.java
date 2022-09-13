@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+//import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,10 +58,12 @@ public class Brand implements Serializable{
     @Version
     private Integer version;
 
+    // 逻辑删除。将数据标记为删除，而并非真正的物理删除（非DELETE操作），
+    // 查询时需要携带状态条件，确保被标记的数据不被查询到。
+    // 这样做的目的就是避免 数据被真正地删除。
     @TableField(select = false) // 不参与查询
     @TableLogic
     private Integer deleted;
-
 
 
     // //逻辑视图
@@ -72,8 +74,8 @@ public class Brand implements Serializable{
         return status == 0 ? "禁用":"启用";
     }
 
-    /**
-     * 考虑范围查询的话，可以定义个类继承Brand, @Data后定义个maxOrdered
-     */
+
+//     考虑范围查询的话，可以定义个类继承Brand, @Data后定义个maxOrdered
+
 
 }
