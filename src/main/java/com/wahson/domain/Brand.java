@@ -44,6 +44,8 @@ public class Brand implements Serializable{
 
     private Integer ordered;
 
+    // 插入和更新时自动填充字段（当 description 为空时）
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String description;
 
     private Integer status;
