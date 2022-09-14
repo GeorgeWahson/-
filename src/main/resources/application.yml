@@ -1,3 +1,10 @@
+# 设置启用的环境
+spring:
+  profiles:
+    active: test
+
+---
+# 开发模块 dev
 # 应用服务 WEB 访问端口
 server:
   port: 8080
@@ -13,15 +20,78 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
-# 隐藏spring banner
+
 spring:
   main:
-    banner-mode: off
+    banner-mode: off   # 隐藏spring banner
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     name: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
     username: root
     password: Wahson11736
+  config:
+    activate:
+      on-profile: dev
+
+---
+# 生产模块 prod
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+# 开启调试输出
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 隐藏MP banner
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 
+spring:
+  main:
+    banner-mode: off   # 隐藏spring banner
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
+    username: root
+    password: Wahson11736
+  config:
+    activate:
+      on-profile: prod
+
+---
+# 测试模块 test
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+# 开启调试输出
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 隐藏MP banner
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+
+spring:
+  main:
+    banner-mode: off   # 隐藏spring banner
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/info_management_test?serverTimezone=UTC
+    username: root
+    password: Wahson11736
+  config:
+    activate:
+      on-profile: test
