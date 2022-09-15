@@ -1,13 +1,9 @@
 package com.wahson.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.api.R;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wahson.dao.BrandDao;
 import com.wahson.domain.Brand;
-import com.wahson.service.IBrandService;
 import com.wahson.service.impl.BrandServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -72,8 +68,6 @@ public class BrandController {
      * @param pageSize
      * @return
      */
-
-    // TODO 可以将部分操作移到 BrandServiceImpl
     @PostMapping("/{currentPage}/{pageSize}")
     public Result selectByPageAndCondition (@PathVariable Integer currentPage, @PathVariable Integer pageSize, @RequestBody(required = false) Brand brand) {
 
