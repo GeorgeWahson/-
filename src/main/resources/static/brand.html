@@ -13,11 +13,8 @@
         }
 
         .content-header {
-
             position: relative;
-
             padding: 15px 15px 0 15px;
-
             /* margin-top: 70px; */
 
         }
@@ -338,7 +335,7 @@
             },
 
 
-            // 情况搜索条件并执行空搜索，显示所有数据
+            // 清空搜索条件并执行空搜索，显示所有数据
             goBack() {
                 // 清空输入框
                 this.clearAfter();
@@ -373,8 +370,7 @@
                         url: "http://localhost:8080/brands/" + row.id,
                     }).then(resp => {
                         if (resp.data.code === 20021) {
-                            // 删除后自动刷新返回首页，避免删除最后一页仅剩唯一的数据时卡在空白页
-                            this.currentPage = 1;
+                            // 删除后自动刷新数据
                             this.selectAll();
 
                             this.$message({
@@ -400,13 +396,6 @@
             changeClickRow(row) {
                 console.log(row);
                 this.brand = row;
-                // this.brand.id = row.id;
-                // this.brand.brandName = row.brandName;
-                // this.brand.companyName = row.companyName;
-                // this.brand.description = row.description;
-                // this.brand.ordered = row.ordered;
-                // this.brand.status = row.status;
-
             },
             
             // 查询方法（包含条件、页数及size信息，若无条件则是原始的selectAll）
@@ -459,8 +448,6 @@
                     if (resp.data.code === 20011) {
                         // 因为添加的数据框绑定搜索的数据框，所以要添加后清空搜索框
                         this.clearAfter();
-                        // 添加成功后跳转回第一页
-                        this.currentPage = 1;
                         // 关闭窗口
                         this.dialogVisible = false;
                         // 重新查询数据
@@ -495,8 +482,6 @@
                             message: 'Bingo! 修改成功',
                             type: 'success'
                         });
-                        // 跳转回第一页
-                        this.currentPage = 1;
                         // 因为添加的数据框绑定搜索的数据框，所以要添加后清空搜索框
                         this.clearAfter()
                         // 重新查询数据
@@ -542,8 +527,6 @@
                             // 清空数组，避免上次数据干扰
                             this.$refs.multipleTable.clearSelection();
                             this.selectedIds = [];
-
-                            this.currentPage = 1;
                             // 重新查询数据
                             this.selectAll();
                             // 添加成功消息框

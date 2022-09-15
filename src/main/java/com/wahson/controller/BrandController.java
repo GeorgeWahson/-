@@ -72,6 +72,10 @@ public class BrandController {
     public Result selectByPageAndCondition (@PathVariable Integer currentPage, @PathVariable Integer pageSize, @RequestBody(required = false) Brand brand) {
 
         IPage<Brand> resultPage = brandService.selectByPageAndCondition(currentPage, pageSize, brand);
+        // 执行删除时，若最后一页只有一条数据，把他删了后，页面会到当前的最后一页，数据也要变为最后一页的数据，否则最后一页显示第一页数据。
+        if (currentPage > resultPage.getPages()) {
+            resultPage = brandService.selectByPageAndCondition((int) resultPage.getPages(), pageSize, brand);
+        }
         List<Brand> resultPageRecords = resultPage.getRecords();
         Integer totalCount = Math.toIntExact(resultPage.getTotal());
         boolean flag = resultPageRecords.size() > 0;
