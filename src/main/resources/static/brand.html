@@ -12,7 +12,6 @@
             background: #f0f9eb;
         }
 
-
         .content-header {
 
             position: relative;
@@ -29,12 +28,10 @@
 <div id="app">
 
     <div class="content-header">
-
         <h1>品牌管理系统</h1>
-
     </div>
 
-    <hr color="green">
+    <hr color="#3c8dbc">
     <!--搜索表单-->
     <el-form :inline="true" :model="brand" class="demo-form-inline">
         <!--brand.statusStr 相当于前面加个get &ndash;&gt; brand.getStatusStr()-->
@@ -55,7 +52,7 @@
         </el-form-item>
 
         <el-form-item>
-            <el-button type="info" @click="reback">清空搜索条件</el-button>
+            <el-button type="info" @click="goBack">清空搜索条件</el-button>
         </el-form-item>
 
         <el-form-item>
@@ -116,7 +113,10 @@
             <el-form-item>
                 <el-button type="warning" @click="resetForm('addForm')">重置</el-button>
                 <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
-                <el-button type="info" @click="resetForm('addForm'); clearAfter(); dialogVisible = false; cancelAdd();">取消</el-button>
+                <el-button type="info"
+                           @click="resetForm('addForm'); clearAfter(); dialogVisible = false; cancelMessage('addForm');">
+                    取消
+                </el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -187,7 +187,7 @@
                     label="操作">
                 <el-row slot-scope="scope">
                     <el-button type="primary"
-                               @click="changClickRow(scope.row) ;  changeBrandDialogVisible = true; checkStatusValue();">
+                               @click="changeClickRow(scope.row) ;  changeBrandDialogVisible = true; checkStatusValue();">
                         修改
                     </el-button>
                     <el-button type="danger" @click="handleClick(scope.row)">删除</el-button>
@@ -240,7 +240,9 @@
             <!--底部功能按钮-->
             <el-form-item>
                 <el-button type="primary" @click="submitForm('updateForm')">提交修改</el-button>
-                <el-button type="info" @click="resetForm('updateForm'); clearAfter(); changeBrandDialogVisible = false; cancelUpdate()">取消
+                <el-button type="info"
+                           @click="resetForm('updateForm'); clearAfter(); changeBrandDialogVisible = false; cancelMessage('updateForm')">
+                    取消
                 </el-button>
             </el-form-item>
         </el-form>
@@ -277,9 +279,9 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        if (formName === "updateForm"){
+                        if (formName === "updateForm") {
                             this.updateBrand();
-                        } else if (formName === "addForm"){
+                        } else if (formName === "addForm") {
                             this.addBrand();
                         }
                     } else {
@@ -292,27 +294,31 @@
                     }
                 });
             },
+            
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+                if (formName === 'updateForm') {
+                    // 更新操作后，为了清除上次的输入框提示信息，
+                    // 需要resetForm,然而就会导致该行信息为空，需要重新异步查询。
+                    this.selectAll();
+                }
             },
 
             getRowKeyOfTarget(row) {
                 return row.id;
             },
 
-            // 取消添加操作
-            cancelAdd() {
+            // 不同操作的取消，显示不同的信息。
+            cancelMessage(formName) {
+                var msg = '';
+                if (formName === 'updateForm') {
+                    msg = '已取消修改';
+                } else if (formName === 'addForm') {
+                    msg = '已取消添加';
+                }
                 this.$message({
                     showClose: true,
-                    message: '已取消添加'
-                });
-            },
-
-            // 取消修改操作
-            cancelUpdate() {
-                this.$message({
-                    showClose: true,
-                    message: '已取消修改'
+                    message: msg
                 });
             },
 
@@ -320,6 +326,7 @@
             switchChange() {
                 this.brand.status = this.switchValue;
             },
+            
             // 根据brand.status返回value
             checkStatusValue() {
                 if (this.brand.status === 0) {
@@ -332,7 +339,7 @@
 
 
             // 情况搜索条件并执行空搜索，显示所有数据
-            reback() {
+            goBack() {
                 // 清空输入框
                 this.clearAfter();
 
@@ -344,8 +351,7 @@
 
                 this.selectAll();
             },
-
-
+            
             clearAfter() {
                 this.brand.brandName = '';
                 this.brand.companyName = '';
@@ -354,11 +360,9 @@
                 this.brand.ordered = '';
                 this.brand.description = '';
             },
-
-
+            
             // 删除一行数据
             handleClick(row) {
-
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -393,17 +397,18 @@
             },
 
             // 修改数据.读取该行数据，并将结果加载至修改对话框
-            changClickRow(row) {
-                this.brand.id = row.id;
-                this.brand.brandName = row.brandName;
-                this.brand.companyName = row.companyName;
-                this.brand.description = row.description;
-                this.brand.ordered = row.ordered;
-                this.brand.status = row.status;
+            changeClickRow(row) {
+                console.log(row);
+                this.brand = row;
+                // this.brand.id = row.id;
+                // this.brand.brandName = row.brandName;
+                // this.brand.companyName = row.companyName;
+                // this.brand.description = row.description;
+                // this.brand.ordered = row.ordered;
+                // this.brand.status = row.status;
 
             },
-
-
+            
             // 查询方法（包含条件、页数及size信息，若无条件则是原始的selectAll）
             selectAll() {
 
@@ -442,8 +447,7 @@
                 this.companyNameData = this.brand.companyName;
                 this.statusData = this.brand.status;
             },
-
-
+            
             // 添加数据
             addBrand() {
                 // 发送请求ajax
@@ -469,8 +473,7 @@
                     }
                 })
             },
-
-
+            
             // 修改数据
             updateBrand() {
                 // 发送请求ajax
@@ -501,8 +504,7 @@
                     }
                 })
             },
-
-
+            
             // 批量删除
             deleteByIds() {
                 // 所选数据为0时，直接提示并return
@@ -555,7 +557,6 @@
                 });
             },
 
-
             // 每页显示数量 变换
             handleSizeChange(val) {
                 // 将默认的数据或上次查询过后的数据放回输入框，保证切页不自动onSubmit
@@ -578,6 +579,7 @@
             }
 
         },
+        
         data() {
             var checkOrdered = (rule, value, callback) => {
 
