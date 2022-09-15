@@ -202,7 +202,9 @@
             title="修改品牌"
             :visible.sync="changeBrandDialogVisible"
             width="35%"
-            :show-close="false">
+            :show-close="false"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false">
 
         <el-form ref="updateForm" :model="brand" label-width="110px" :rules="rules">
 
@@ -238,7 +240,7 @@
             <!--底部功能按钮-->
             <el-form-item>
                 <el-button type="primary" @click="submitForm('updateForm')">提交修改</el-button>
-                <el-button type="info" @click="clearAfter(); changeBrandDialogVisible = false; cancelUpdate()">取消
+                <el-button type="info" @click="resetForm('updateForm'); clearAfter(); changeBrandDialogVisible = false; cancelUpdate()">取消
                 </el-button>
             </el-form-item>
         </el-form>
