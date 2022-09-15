@@ -25,11 +25,11 @@ spring:
   main:
     banner-mode: off   # 隐藏spring banner
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
-    username: root
-    password: Wahson11736
-    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
+      username: root
+      password: Wahson11736
   config:
     activate:
       on-profile: dev
@@ -51,16 +51,15 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
-
 spring:
   main:
     banner-mode: off   # 隐藏spring banner
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
-    username: root
-    password: Wahson11736
-    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
+      username: root
+      password: Wahson11736
   config:
     activate:
       on-profile: prod
@@ -87,11 +86,11 @@ spring:
   main:
     banner-mode: off   # 隐藏spring banner
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/info_management_test?serverTimezone=UTC
-    username: root
-    password: Wahson11736
-    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
+      username: root
+      password: Wahson11736
   config:
     activate:
       on-profile: test
