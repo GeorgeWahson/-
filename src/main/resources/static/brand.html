@@ -470,6 +470,11 @@
                             message: 'Bingo! 添加成功',
                             type: 'success'
                         });
+                    } else {
+                        this.$message({
+                            message: resp.data.msg,
+                            type: 'error'
+                        });
                     }
                 })
             },
@@ -546,7 +551,6 @@
                                 message: 'Bingo! 删除成功',
                                 type: 'success'
                             });
-
                         }
                     })
                 }).catch(() => {
