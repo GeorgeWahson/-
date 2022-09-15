@@ -16,7 +16,6 @@ import java.util.List;
 @SpringBootTest
 class InfoSystemApplicationTests {
 
-    // TODO 建立测试环境，Test删除数据库
     @Autowired
     private BrandDao brandDao;
 
