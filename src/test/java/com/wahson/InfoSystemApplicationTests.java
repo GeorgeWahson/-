@@ -57,4 +57,16 @@ class InfoSystemApplicationTests {
 //        System.out.println(brand1);
     }
 
+    @Test
+    void testInsert() {
+        Brand brand = new Brand();
+        brand.setStatus(1);
+        brand.setBrandName("Maven test");
+        brand.setCompanyName("Maven test");
+        brand.setDescription("hello test");
+        brand.setOrdered(100);
+        boolean b = brandService.addBrand(brand);
+        System.out.println(b);
+    }
+
 }
