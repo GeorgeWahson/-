@@ -1,4 +1,11 @@
-# TODO
+# log分支
 
-## 1 加入登录页面
+## 用于lombok @Slf4j log测试，练习使用。
+
+logging.file.name设置文件输出
+
+logback.rollingpolicy.max-file-size
+
+logback.rollingpolicy.file-name-pattern
+
 

@@ -81,10 +81,7 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
-
 spring:
-  main:
-    banner-mode: off   # 隐藏spring banner
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -94,3 +91,24 @@ spring:
   config:
     activate:
       on-profile: test
+  main:
+    banner-mode: off
+
+# 设置日志级别
+logging:
+  level:
+    root: info
+#    # 设置某个包的日志级别
+#    com.wahson.controller: warn
+  # 设置日志模板格式 %clr(加颜色)
+  pattern:
+#    console: "%d - %m %n"
+#    console: "%d %clr(%5p) - %clr(%m) %n"
+#    console: "%d %clr(%5p) --- [%16t] %-40.40c : %clr(%m) %n"
+    console: "%d %clr(%p) --- [%16t] %clr(%-40.40c){cyan} : %m %n"
+  file:
+    name: server.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: server.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 4KB
