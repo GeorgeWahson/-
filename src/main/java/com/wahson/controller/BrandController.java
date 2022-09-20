@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wahson.dao.BrandDao;
 import com.wahson.domain.Brand;
 import com.wahson.service.impl.BrandServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ import java.util.List;
  * @author GeorgeWahson
  * @since 2022-09-08
  */
-@Slf4j
 @RestController
 @RequestMapping("/brands")
 public class BrandController {
@@ -72,13 +70,6 @@ public class BrandController {
      */
     @PostMapping("/{currentPage}/{pageSize}")
     public Result selectByPageAndCondition (@PathVariable Integer currentPage, @PathVariable Integer pageSize, @RequestBody(required = false) Brand brand) {
-        log.info("selectByPageAndCondition...");
-        log.warn("selectByPageAndCondition...");
-        log.error("selectByPageAndCondition...");
-        log.info("selectByPageAndCondition...");
-        log.warn("selectByPageAndCondition...");
-        log.error("selectByPageAndCondition...");
-        log.info("selectByPageAndCondition...");
         IPage<Brand> resultPage = brandService.selectByPageAndCondition(currentPage, pageSize, brand);
         // 执行删除时，若最后一页只有一条数据，把他删了后，页面会到当前的最后一页，数据也要变为最后一页的数据，否则最后一页显示第一页数据。
         if (currentPage > resultPage.getPages()) {
