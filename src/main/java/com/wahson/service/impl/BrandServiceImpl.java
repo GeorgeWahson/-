@@ -7,6 +7,8 @@ import com.wahson.domain.Brand;
 import com.wahson.dao.BrandDao;
 import com.wahson.service.IBrandService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +30,31 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements IB
     @Autowired
     private BrandDao brandDao;
 
+    // spring-admin计数器 Counter 包为 io.micrometer.core.instrument
+    private Counter select_count;
+    private Counter add_count;
+    private Counter update_count;
+    private Counter delete_times;
+
+    // 构造器传入
+    public BrandServiceImpl (MeterRegistry meterRegistry) {
+        select_count = meterRegistry.counter("用户调用查询次数：");
+        add_count = meterRegistry.counter("用户调用添加次数：");
+        update_count = meterRegistry.counter("用户调用更新次数：");
+        delete_times = meterRegistry.counter("用户调用删除次数：");
+    }
+
     // 增
     public boolean addBrand(Brand brand) {
         int insert = brandDao.insert(brand);
+        add_count.increment();
         return insert == 1;
     }
 
     // 单个删除，前端传入所选数据的id，按id删除
     public boolean deleteByid(Integer id) {
         int deleteNum = brandDao.deleteById(id);
+        delete_times.increment();
         return deleteNum == 1;
     }
 
@@ -44,6 +62,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements IB
     public boolean deleteByIds(Integer[] ids) {
         List<Integer> list = Arrays.asList(ids);
         int deleteNum = brandDao.deleteBatchIds(list);
+        delete_times.increment();
         return deleteNum == list.size();
     }
 
@@ -67,6 +86,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements IB
         brandVersion.setDescription(brand.getDescription());
 
         int update = brandDao.updateById(brandVersion);
+        update_count.increment();
         return update == 1;
     }
 
@@ -81,6 +101,8 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements IB
         lqw.like(null != brand.getCompanyName(), Brand::getCompanyName, brand.getCompanyName());
         lqw.like(null != brand.getStatus(), Brand::getStatus, brand.getStatus());
         IPage<Brand> resultPage = brandDao.selectPage(page, lqw);
+        // 调用方法后counter自增
+        select_count.increment();
         return resultPage;
     }
 

@@ -26,6 +26,11 @@ spring:
       on-profile: test
   main:
     banner-mode: off
+  # 可视化监控客户端，设置当前客户端将信息上传到哪个服务器上
+  boot:
+    admin:
+      client:
+        url: http://localhost:8888
 
 # 设置日志级别
 logging:
@@ -45,3 +50,19 @@ logging:
     rollingpolicy:
       file-name-pattern: server.%d{yyyy-MM-dd}.%i.log
       max-file-size: 4KB
+
+# 1.开放指定信息给服务器看
+# 2.允许服务器以HTTP请求的方式获取对应的信息
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+info:
+  appName: 品牌管理系统
+  version: "1.0"
+  author: GeorgeWahson
+  since: 2022-09-08
