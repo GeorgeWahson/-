@@ -552,6 +552,8 @@
                 this.brand.status = this.statusData;
                 // 传入当前页数
                 this.pageSize = val;
+                // 换pagesize后跳转为第一页
+                this.currentPage = 1;
                 this.selectAll();
             },
 
