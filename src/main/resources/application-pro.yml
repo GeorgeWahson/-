@@ -1,0 +1,28 @@
+# 生产模块 pro
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+# 开启调试输出
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 隐藏MP banner
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+spring:
+  main:
+    banner-mode: off   # 隐藏spring banner
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/info_management?serverTimezone=UTC
+      username: root
+      password: Wahson11736
+  config:
+    activate:
+      on-profile: pro

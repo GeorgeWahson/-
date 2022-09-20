@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wahson.dao.BrandDao;
 import com.wahson.domain.Brand;
 import com.wahson.service.impl.BrandServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-
+@Slf4j
 @SpringBootTest
 @Transactional // 设置事务，打包及测试时，测试数据不会加入数据库
 @Rollback(value = true) // 默认回滚，但id还是会被占用
@@ -29,12 +29,12 @@ class InfoSystemApplicationTests {
         Brand brand = new Brand();
         Integer count = brandDao.selectCount(null);
         IPage<Brand> resultPage = brandService.selectByPageAndCondition(1, 10, brand);
-        System.out.println("==========每页显示数量为：" + resultPage.getSize() + "==========");
-        System.out.println("=============当前为第" + resultPage.getCurrent() + "页=============");
-        System.out.println("数据库共有" + count + "条数据（selectCount）");
-        System.out.println("符合查询条件的数据有：" + resultPage.getTotal() + "条（getTotal）");
-        System.out.println("查询结果总页数为：" + resultPage.getPages());
-        System.out.println("查询结果如下：");
+        log.info("==========每页显示数量为：" + resultPage.getSize() + "==========");
+        log.info("=============当前为第" + resultPage.getCurrent() + "页=============");
+        log.info("数据库共有" + count + "条数据（selectCount）");
+        log.info("符合查询条件的数据有：" + resultPage.getTotal() + "条（getTotal）");
+        log.info("查询结果总页数为：" + resultPage.getPages());
+        log.info("查询结果如下：");
         List<Brand> records = resultPage.getRecords();
         for (Brand record : records) {
             System.out.println(record);
