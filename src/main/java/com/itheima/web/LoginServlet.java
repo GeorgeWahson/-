@@ -20,9 +20,8 @@ public class LoginServlet extends HttpServlet {
 
         String remember = request.getParameter("remember");
 
-
-
         User user = service.login(username, password);
+
 
         if (user != null) {
             if ("1".equals(remember)) {

@@ -10,25 +10,25 @@ public interface UserMapper {
 
     /**
      * 根据用户名和密码查询用户对象
-     * @param username
+     * @param userName
      * @param password
      * @return
      */
-    @Select("select * from tb_user where username = #{username} and password = #{password}")
-    User select(@Param("username") String username,@Param("password")  String password);
+    @Select("select * from tb_user where user_name = #{userName} and password = #{password}")
+    User select(@Param("userName") String userName,@Param("password")  String password);
 
     /**
      * 根据用户名查询用户对象
-     * @param username
+     * @param userName
      * @return
      */
-    @Select("select * from tb_user where username = #{username}")
-    User selectByUsername(String username);
+    @Select("select * from tb_user where user_name = #{userName}")
+    User selectByUsername(String userName);
 
     /**
      * 添加用户
      * @param user
      */
-    @Insert("insert into tb_user values(null,#{username},#{password})")
+    @Insert("insert into tb_user values(null,#{userName},#{password})")
     void add(User user);
 }

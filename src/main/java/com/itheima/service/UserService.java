@@ -30,7 +30,7 @@ public class UserService {
 
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
 
-        User u = mapper.selectByUsername(user.getUsername());
+        User u = mapper.selectByUsername(user.getUserName());
 
         if (u == null) {
             mapper.add(user);

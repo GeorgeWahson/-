@@ -3,17 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
     <!--起别名-->
     <typeAliases>
         <package name="com.itheima.pojo"/>
     </typeAliases>
 
+
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql:///test?useSSL=false&amp;useServerPrepStmts=true"/>
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/db1?useSSL=false&amp;useServerPrepStmts=true"/>
                 <property name="username" value="root"/>
                 <property name="password" value="Wahson11736"/>
             </dataSource>
@@ -23,4 +29,6 @@
         <!--扫描mapper-->
         <package name="com.itheima.mapper"/>
     </mappers>
+
+
 </configuration>

@@ -1,6 +1,7 @@
 package com.itheima.web;
 
 import com.itheima.pojo.Brand;
+import com.itheima.pojo.User;
 import com.itheima.service.BrandService;
 
 import javax.servlet.*;
@@ -18,6 +19,10 @@ public class SelectAllServlet extends HttpServlet {
 
         List<Brand> brands = service.selectAll();
 
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        request.setAttribute("user", user);
 
         request.setAttribute("brands", brands);
 

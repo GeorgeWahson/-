@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<h1>${user.username}, 欢迎您</h1>
+<h1>${user.userName}, 欢迎您</h1>
 
 <input type="button" value="新增" id="add" ><br>
 <hr>
